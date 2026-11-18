@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "User (response de GET /user/{username})",
+  "type": "object",
+  "required": ["id", "username", "userStatus"],
+  "additionalProperties": false,
+  "properties": {
+    "id": {"type": "integer"},
+    "username": {"type": "string"},
+    "firstName": {"type": "string"},
+    "lastName": {"type": "string"},
+    "email": {"type": "string"},
+    "password": {"type": "string"},
+    "phone": {"type": "string"},
+    "userStatus": {"type": "integer"}
+  }
+}
