@@ -17,6 +17,7 @@ import allure
 import requests
 
 from src.enums import ApiResponseType, ContentType
+from src.utils.assertions import assert_equals, show
 from src.utils.json_path import MISSING, get_by_path
 from src.validators.response_validator import content_type_error, response_json, schema_error
 
@@ -34,12 +35,6 @@ OMITTED_FIELD_DEFAULTS: dict[str, Any] = {
     "phone": MISSING,
     "userStatus": 0,
 }
-
-
-def _show(value: Any, masked: bool = False) -> str:
-    if value is MISSING:
-        return "(ausente)"
-    return "'***'" if masked else repr(value)
 
 
 class _Checker:
@@ -70,10 +65,14 @@ class _Checker:
             pass  # los errores ya están en self.errors
 
     def equals(self, label: str, expected: Any, actual: Any, masked: bool = False) -> None:
-        ok = actual == expected
-        title = f"{label}: esperado {_show(expected, masked)} | recibido {_show(actual, masked)}"
-        error = None if ok else f"{label}: esperado {_show(expected, masked)}, recibido {_show(actual, masked)}"
-        self.check(("✔ " if ok else "✘ ") + title, error)
+        """assert_equals dentro de un sub-paso de Allure; si falla, acumula el error y sigue."""
+        icon = "✔ " if actual == expected else "✘ "
+        title = f"{icon}{label}: esperado {show(expected, masked)} | recibido {show(actual, masked)}"
+        try:
+            with allure.step(title):
+                assert_equals(actual, expected, label, masked)
+        except AssertionError as exc:
+            self.errors.append(str(exc))
 
 
 def validate_user_created(
@@ -96,8 +95,8 @@ def validate_user_created(
             checker.equals("message (id enviado)", str(request["id"]), message)
         else:
             checker.check(
-                f"message es un id numérico: {_show(message)}",
-                None if str(message).isdigit() else f"message no es un id: {_show(message)}",
+                f"message es un id numérico: {show(message)}",
+                None if str(message).isdigit() else f"message no es un id: {show(message)}",
             )
 
     # 2. Usuario guardado, campo por campo
