@@ -1,4 +1,3 @@
-"""User steps. Given builds the payload, When sends it and stores the response, Then validates."""
 from http import HTTPStatus
 
 from behave import given, then, when

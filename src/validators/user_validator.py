@@ -1,15 +1,3 @@
-"""Full validation of user creation, update and deletion.
-
-POST /user and PUT /user/{username} do not return the user, only an ApiResponse:
-{"code":200,"type":"unknown","message":"<id>"}. So that ApiResponse is validated first and
-then, field by field, the user obtained with GET /user/{username}.
-DELETE /user/{username} returns the same ApiResponse with the username as message, and
-afterwards GET /user/{username} must return 404.
-
-Each check is an Allure sub-step showing the expected and actual values; if it fails,
-that sub-step turns red and the remaining checks keep running. At the end a single
-AssertionError is raised with all the errors.
-"""
 from collections.abc import Iterator
 from contextlib import contextmanager
 from http import HTTPStatus
