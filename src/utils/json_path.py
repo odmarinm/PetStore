@@ -1,4 +1,4 @@
-"""Acceso a campos anidados con notación de puntos: "category.name", "tags.0.id"."""
+"""Access nested fields using dot notation: "category.name", "tags.0.id"."""
 from typing import Any
 
 MISSING = object()

@@ -3,7 +3,7 @@ import shutil
 import sys
 from pathlib import Path
 
-# Permite importar el paquete "src" desde la raíz del proyecto.
+# Allows importing the "src" package from the project root.
 ROOT_DIR = Path(__file__).resolve().parents[1]
 if str(ROOT_DIR) not in sys.path:
     sys.path.insert(0, str(ROOT_DIR))
@@ -14,9 +14,9 @@ ALLURE_RESULTS_DIR = ROOT_DIR / "reports" / "allure-results"
 
 
 def _clean_allure_results() -> None:
-    """Vacía los resultados de corridas anteriores para que el reporte muestre solo esta ejecución.
+    """Clear results from previous runs so the report only shows this execution.
 
-    Se borra el contenido y no la carpeta, porque el formatter de Allure ya la creó y la está usando.
+    The contents are deleted, not the folder, because the Allure formatter already created it and is using it.
     """
     ALLURE_RESULTS_DIR.mkdir(parents=True, exist_ok=True)
     for item in ALLURE_RESULTS_DIR.iterdir():
@@ -27,7 +27,7 @@ def _clean_allure_results() -> None:
 
 
 def _write_allure_environment(settings) -> None:
-    """Datos que Allure muestra en el widget 'Environment' del reporte."""
+    """Data shown by Allure in the report's 'Environment' widget."""
     properties = {
         "Base.URL": settings.base_url,
         "Python": platform.python_version(),

@@ -1,4 +1,4 @@
-"""Builder del modelo User de swagger.json (ningún campo es requerido).
+"""Builder for the User model from swagger.json (no field is required).
 
 User: id (int64), username, firstName, lastName, email, password, phone (string),
       userStatus (int32)
@@ -8,12 +8,12 @@ from typing import Any
 
 
 def generate_id() -> int:
-    """Id explícito: sin id, el PetStore público asigna uno inválido (~9223372036854...)."""
+    """Explicit id: without one, the public PetStore assigns an invalid id (~9223372036854...)."""
     return random.randint(1_000_000_000, 9_999_999_999_999)
 
 
 def unique_username(prefix: str = "qa_user") -> str:
-    """El username es la clave de GET /user/{username}: debe ser único en el servidor compartido."""
+    """The username is the key for GET /user/{username}: it must be unique on the shared server."""
     return f"{prefix.lower()}_{random.randint(100_000, 999_999)}"
 
 

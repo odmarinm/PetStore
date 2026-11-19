@@ -1,4 +1,4 @@
-"""Steps de User. Given arma el payload, When ejecuta y guarda el response, Then valida."""
+"""User steps. Given builds the payload, When sends it and stores the response, Then validates."""
 from behave import given, then, when
 
 from src.builders.user_builder import UserBuilder, unique_username

@@ -1,4 +1,4 @@
-"""Validaciones genéricas del response, reutilizables por cualquier feature."""
+"""Generic response validations, reusable by any feature."""
 from behave import then
 
 from src.validators.response_validator import (

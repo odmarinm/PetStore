@@ -1,4 +1,4 @@
-"""Validaciones de responses reutilizables. No hace HTTP: recibe el response ya obtenido."""
+"""Reusable response validations. No HTTP here: receives an already obtained response."""
 import json
 from typing import Any
 
@@ -37,7 +37,7 @@ def schema_error(body: Any, schema_name: str) -> str | None:
 
 
 def field_error(request: Any, body: Any, path: str) -> str | None:
-    """Compara un campo del request contra el mismo campo del response."""
+    """Compare a request field against the same field in the response."""
     expected = get_by_path(request, path)
     actual = get_by_path(body, path)
     if expected is MISSING:

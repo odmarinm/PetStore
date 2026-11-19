@@ -1,4 +1,4 @@
-"""Carga la configuración desde el archivo .env de la raíz del proyecto."""
+"""Loads the configuration from the .env file at the project root."""
 import os
 from dataclasses import dataclass
 from functools import lru_cache

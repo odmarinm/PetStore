@@ -1,1 +1,1 @@
-"""Construcción de payloads. Esta capa NUNCA hace llamadas HTTP."""
+"""Payload construction. This layer NEVER makes HTTP calls."""

@@ -2,7 +2,7 @@ from enum import StrEnum
 
 
 class Endpoint(StrEnum):
-    """Rutas relativas a BASE_URL (definida en .env)."""
+    """Paths relative to BASE_URL (defined in .env)."""
 
     USER = "/user"
     USER_BY_USERNAME = "/user/{username}"

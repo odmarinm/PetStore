@@ -1,12 +1,12 @@
-"""Validación completa de la creación de un usuario.
+"""Full validation of user creation.
 
-POST /user no devuelve el usuario, solo un ApiResponse: {"code":200,"type":"unknown","message":"<id>"}.
-Por eso se valida ese ApiResponse y luego, campo por campo, el usuario obtenido con
+POST /user does not return the user, only an ApiResponse: {"code":200,"type":"unknown","message":"<id>"}.
+So that ApiResponse is validated first and then, field by field, the user obtained with
 GET /user/{username}.
 
-Cada comprobación es un sub-paso de Allure con el valor esperado y el recibido; si falla,
-ese sub-paso queda en rojo y se siguen evaluando los demás. Al final se lanza un único
-AssertionError con todos los errores.
+Each check is an Allure sub-step showing the expected and actual values; if it fails,
+that sub-step turns red and the remaining checks keep running. At the end a single
+AssertionError is raised with all the errors.
 """
 from collections.abc import Iterator
 from contextlib import contextmanager
@@ -23,10 +23,10 @@ from src.validators.response_validator import content_type_error, response_json,
 
 USER_FIELDS = ("id", "username", "firstName", "lastName", "email", "password", "phone", "userStatus")
 
-# Campos cuyo valor no se muestra en el reporte.
+# Fields whose value is hidden in the report.
 MASKED_FIELDS = {"password"}
 
-# Qué devuelve GET /user/{username} cuando un campo NO se envió (comportamiento real observado).
+# What GET /user/{username} returns when a field was NOT sent (observed real behavior).
 OMITTED_FIELD_DEFAULTS: dict[str, Any] = {
     "firstName": MISSING,
     "lastName": MISSING,
@@ -38,7 +38,7 @@ OMITTED_FIELD_DEFAULTS: dict[str, Any] = {
 
 
 class _Checker:
-    """Ejecuta cada comprobación como sub-paso de Allure y acumula los errores."""
+    """Run each check as an Allure sub-step and collect the errors."""
 
     def __init__(self) -> None:
         self.errors: list[str] = []
@@ -53,7 +53,7 @@ class _Checker:
 
     @contextmanager
     def group(self, title: str) -> Iterator[None]:
-        """Agrupa comprobaciones; el grupo queda en rojo si alguna de sus comprobaciones falla."""
+        """Group checks; the group turns red if any of its checks fails."""
         errors_before = len(self.errors)
         try:
             with allure.step(title):
@@ -62,10 +62,10 @@ class _Checker:
                 if failed:
                     raise AssertionError(f"{failed} comprobación(es) fallida(s)")
         except AssertionError:
-            pass  # los errores ya están en self.errors
+            pass  # errors are already in self.errors
 
     def equals(self, label: str, expected: Any, actual: Any, masked: bool = False) -> None:
-        """assert_equals dentro de un sub-paso de Allure; si falla, acumula el error y sigue."""
+        """assert_equals inside an Allure sub-step; on failure, record the error and continue."""
         icon = "✔ " if actual == expected else "✘ "
         title = f"{icon}{label}: esperado {show(expected, masked)} | recibido {show(actual, masked)}"
         try:
@@ -83,7 +83,7 @@ def validate_user_created(
     checker = _Checker()
     username = request.get("username")
 
-    # 1. ApiResponse de POST /user
+    # 1. ApiResponse from POST /user
     api_response = response_json(create_response)
     message = api_response.get("message", MISSING)
     with checker.group("Validar POST /user (ApiResponse)"):
@@ -99,7 +99,7 @@ def validate_user_created(
                 None if str(message).isdigit() else f"message no es un id: {show(message)}",
             )
 
-    # 2. Usuario guardado, campo por campo
+    # 2. Saved user, field by field
     with checker.group(f"Validar usuario guardado (GET /user/{username})"):
         if get_response.status_code != HTTPStatus.OK:
             checker.check(

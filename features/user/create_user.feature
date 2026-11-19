@@ -1,10 +1,10 @@
+@user
 @create_user
 
 Feature: Create a user
   As a consumer of the PetStore API
   I want to create a new user
   So that it can operate in the store
-  Endpoint: POST {BASE_URL}/user
 
   Scenario Outline: Create a user with all fields - <first_name> <last_name>
     Given a user with first name "<first_name>", last name "<last_name>" and status <user_status>

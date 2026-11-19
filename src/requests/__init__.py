@@ -1,1 +1,1 @@
-"""Única capa autorizada a realizar llamadas HTTP."""
+"""The only layer allowed to make HTTP calls."""

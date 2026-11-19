@@ -1,4 +1,4 @@
-"""Cliente HTTP base. Adjunta cada request/response al reporte de Allure."""
+"""Base HTTP client. Attaches every request/response to the Allure report."""
 import json
 from typing import Any
 

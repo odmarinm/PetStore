@@ -1,4 +1,4 @@
-"""Casos de uso de User. Los steps hablan con esta capa, nunca con src/requests."""
+"""User use cases. Steps talk to this layer, never to src/requests."""
 import time
 from http import HTTPStatus
 from typing import Any
@@ -17,10 +17,10 @@ class UserInteractor:
         return self._requests.create_user(payload)
 
     def get_user(self, username: str, attempts: int = 5, delay: float = 1.0) -> requests.Response:
-        """Consulta el usuario reintentando ante 404.
+        """Fetch the user, retrying on 404.
 
-        El PetStore público tiene varias instancias detrás de un balanceador; un usuario
-        recién creado puede tardar en aparecer. Cada intento queda visible en Allure.
+        The public PetStore runs several instances behind a load balancer; a newly
+        created user may take a moment to appear. Each attempt is visible in Allure.
         """
         response = self._requests.get_user(username)
         for attempt in range(2, attempts + 1):
