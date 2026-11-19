@@ -1,8 +1,3 @@
-"""Builder for the User model from swagger.json (no field is required).
-
-User: id (int64), username, firstName, lastName, email, password, phone (string),
-      userStatus (int32)
-"""
 import random
 from typing import Any
 
