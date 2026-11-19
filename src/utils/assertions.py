@@ -5,14 +5,14 @@ from src.utils.json_path import MISSING
 
 
 def show(value: Any, masked: bool = False) -> str:
-    """Display a value in messages/report (MISSING -> '(ausente)', masked -> '***')."""
+    """Display a value in messages/report (MISSING -> '(missing)', masked -> '***')."""
     if value is MISSING:
-        return "(ausente)"
+        return "(missing)"
     return "'***'" if masked else repr(value)
 
 
-def assert_equals(actual: Any, expected: Any, field: str = "valor", masked: bool = False) -> None:
+def assert_equals(actual: Any, expected: Any, field: str = "value", masked: bool = False) -> None:
     """Raise AssertionError if actual != expected, showing the field and both values."""
     assert actual == expected, (
-        f"{field}: esperado {show(expected, masked)}, recibido {show(actual, masked)}"
+        f"{field}: expected {show(expected, masked)}, got {show(actual, masked)}"
     )

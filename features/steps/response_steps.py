@@ -17,7 +17,7 @@ def _assert_ok(error: str | None) -> None:
 def step_status_code(context, status_code):
     actual = context.response.status_code
     assert actual == status_code, (
-        f"Status esperado {status_code}, recibido {actual}. Body: {context.response.text}"
+        f"Expected status {status_code}, got {actual}. Body: {context.response.text}"
     )
 
 

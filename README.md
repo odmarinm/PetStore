@@ -7,6 +7,8 @@ Automatización de la API pública [Swagger PetStore](https://petstore.swagger.i
 ```
 features/                 Archivos .feature (Gherkin), agrupados por recurso
   user/create_user.feature
+  user/update_user.feature
+  user/delete_user.feature
   steps/                  Steps: Given arma datos, When ejecuta y guarda, Then valida
   environment.py          Hooks de Behave
 src/
@@ -39,7 +41,8 @@ copy .env.example .env   # y completa los valores
 
 Los resultados de Allure quedan en `reports/allure-results`. Esa carpeta se vacía
 automáticamente al inicio de cada corrida (`features/environment.py`), así el reporte
-muestra solo la última ejecución.
+muestra solo la última ejecución. Al terminar, si el Allure CLI está en el PATH, el HTML se
+regenera solo en `reports/allure-report`.
 
 ## Ver el reporte de Allure
 
@@ -52,7 +55,6 @@ winget install --id EclipseAdoptium.Temurin.21.JDK --exact
 ```
 
 ```powershell
-allure serve reports/allure-results                                        # genera y abre el reporte
-allure generate reports/allure-results -o reports/allure-report --clean    # o genera el HTML
-allure open reports/allure-report                                          # y ábrelo
+allure open reports/allure-report      # abre el HTML de la última ejecución (se genera solo)
+allure serve reports/allure-results    # alternativa: genera un reporte temporal y lo abre
 ```

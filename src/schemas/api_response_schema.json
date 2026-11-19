@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "ApiResponse (response de POST /user)",
+  "title": "ApiResponse (response of POST, PUT and DELETE /user and of errors)",
   "type": "object",
   "required": ["code", "type", "message"],
   "additionalProperties": false,

@@ -20,7 +20,7 @@ class Settings:
 def _required(name: str) -> str:
     value = os.getenv(name)
     if not value:
-        raise RuntimeError(f"Falta la variable '{name}' en el archivo .env")
+        raise RuntimeError(f"Missing variable '{name}' in the .env file")
     return value
 
 

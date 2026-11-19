@@ -1,5 +1,6 @@
 import platform
 import shutil
+import subprocess
 import sys
 from pathlib import Path
 
@@ -11,6 +12,7 @@ if str(ROOT_DIR) not in sys.path:
 from src.config.settings import get_settings  # noqa: E402
 
 ALLURE_RESULTS_DIR = ROOT_DIR / "reports" / "allure-results"
+ALLURE_REPORT_DIR = ROOT_DIR / "reports" / "allure-report"
 
 
 def _clean_allure_results() -> None:
@@ -37,10 +39,47 @@ def _write_allure_environment(settings) -> None:
     (ALLURE_RESULTS_DIR / "environment.properties").write_text(content + "\n", encoding="utf-8")
 
 
+def _console(message: str) -> None:
+    """Print straight to the console: behave captures stdout inside hooks."""
+    print(message, file=sys.__stdout__, flush=True)
+
+
+def _allure_enabled(context) -> bool:
+    """True when the Allure formatter is active (it is not when running e.g. with -f plain)."""
+    return any("allure" in fmt.lower() for fmt in context.config.format or [])
+
+
+def _generate_allure_report() -> None:
+    """Regenerate the HTML report so `allure open` always shows the latest run.
+
+    Allure writes each feature's results when the feature ends, so they are complete by after_all.
+    Requires the Allure CLI on PATH; if it is missing, the run is not affected.
+    """
+    allure_cli = shutil.which("allure")
+    if not allure_cli:
+        _console("\nAllure CLI not found on PATH: HTML report not generated.")
+        return
+    result = subprocess.run(
+        [allure_cli, "generate", str(ALLURE_RESULTS_DIR), "-o", str(ALLURE_REPORT_DIR), "--clean"],
+        capture_output=True,
+        text=True,
+    )
+    if result.returncode == 0:
+        _console(f"\nAllure report generated: {ALLURE_REPORT_DIR}")
+    else:
+        _console(f"\nAllure report could not be generated:\n{result.stdout}{result.stderr}")
+
+
 def before_all(context):
     context.settings = get_settings()
-    _clean_allure_results()
-    _write_allure_environment(context.settings)
+    if _allure_enabled(context):
+        _clean_allure_results()
+        _write_allure_environment(context.settings)
+
+
+def after_all(context):
+    if _allure_enabled(context):
+        _generate_allure_report()
 
 
 def before_scenario(context, scenario):
